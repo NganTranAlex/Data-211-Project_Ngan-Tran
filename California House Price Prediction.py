@@ -2,7 +2,7 @@ import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsRegressor
-from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+from sklearn.metrics import root_mean_squared_error, mean_absolute_error, r2_score
 
 # load the dataset/ csv file
 california_house_prices = pd.read_csv("C:/Codefile/housing file/housing.csv")
@@ -38,3 +38,16 @@ features_test = scaling.transform(features_test)
 k_values = [1, 3, 5, 7, 9, 15]
 
 results_list = []
+
+# --- Constructing model ---
+for k in k_values:
+    knn_model = KNeighborsRegressor(n_neighbors = k)
+    knn_model.fit(features_train, labels_train)
+
+    predicted_values = knn_model.predict(features_test)
+
+    mae = mean_absolute_error(labels_test, predicted_values)
+    rmse = root_mean_squared_error(labels_test, predicted_values)
+    r2 = r2_score(labels_test, predicted_values)
+
+    results_list.append([k, mae, rmse, r2])
